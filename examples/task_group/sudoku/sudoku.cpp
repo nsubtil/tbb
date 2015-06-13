@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -18,13 +18,11 @@
     reasons why the executable file might be covered by the GNU General Public License.
 */
 
+#include "../../common/utility/utility.h"
+
 #if __TBB_MIC_OFFLOAD
 #pragma offload_attribute (push,target(mic))
 #endif // __TBB_MIC_OFFLOAD
-
-// This header should come before any other one.
-// For details, see Known Issues in the Release Notes.
-#include "tbb/tbb_stddef.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -34,8 +32,6 @@
 #include "tbb/tick_count.h"
 #include "tbb/task_scheduler_init.h"
 #include "tbb/task_group.h"
-
-#include "../../common/utility/utility.h"
 
 #pragma warning(disable: 4996)
 

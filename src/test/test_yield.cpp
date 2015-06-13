@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -20,6 +20,9 @@
 
 // Test that __TBB_Yield works.
 // On Red Hat EL4 U1, it does not work, because sched_yield is broken.
+
+#define HARNESS_DEFAULT_MIN_THREADS 4
+#define HARNESS_DEFAULT_MAX_THREADS 8
 
 #include "tbb/tbb_machine.h"
 #include "tbb/tick_count.h"

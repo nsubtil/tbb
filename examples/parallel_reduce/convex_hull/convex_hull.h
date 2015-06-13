@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 #ifndef __CONVEX_HULL_H__
 #define __CONVEX_HULL_H__
 
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
@@ -30,13 +31,11 @@
 #include <cstring>
 #include <algorithm>
 #include <functional>
-#include <cassert>
 #include <climits>
 #include "tbb/tick_count.h"
 #include "tbb/task_scheduler_init.h"
 #include "../../common/utility/utility.h"
 #include "../../common/utility/fast_random.h"
-#include "tbb/blocked_range.h"
 
 using namespace std;
 

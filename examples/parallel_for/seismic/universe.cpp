@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -180,14 +180,14 @@ struct UpdateVelocityBody {
     Universe & u_;
     UpdateVelocityBody(Universe & u):u_(u){}
     void operator()( const tbb::blocked_range<int>& y_range ) const {
-        u_.UpdateVelocity(Universe::Rectangle(0,y_range.begin(),u_.UniverseWidth-1,y_range.size()));
+        u_.UpdateVelocity(Universe::Rectangle(1,y_range.begin(),u_.UniverseWidth-1,y_range.size()));
     }
 };
 
 void Universe::ParallelUpdateVelocity(tbb::affinity_partitioner &affinity) {
-    tbb::parallel_for( tbb::blocked_range<int>( 0, UniverseHeight-1 ), // Index space for loop
-                       UpdateVelocityBody(*this),                           // Body of loop
-                       affinity );                                     // Affinity hint
+    tbb::parallel_for( tbb::blocked_range<int>( 1, UniverseHeight ), // Index space for loop
+                       UpdateVelocityBody(*this),                    // Body of loop
+                       affinity );                                   // Affinity hint
 }
 
 void Universe::SerialUpdateUniverse() {

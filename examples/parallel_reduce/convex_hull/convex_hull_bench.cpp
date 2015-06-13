@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
     This file contains a few implementations, so it may look overly complicated.
     The most efficient implementation is also separated into convex_hull_sample.cpp
 */
-#include <cassert>
 #include "convex_hull.h"
 
 typedef util::point<double> point_t;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -313,13 +313,14 @@ concurrent_queue_base::page* micro_queue::make_copy( concurrent_queue_base& base
     new_page->next = NULL;
     new_page->mask = src_page->mask;
     for( ; begin_in_page!=end_in_page; ++begin_in_page, ++g_index )
-        if( new_page->mask & uintptr_t(1)<<begin_in_page )
+        if( new_page->mask & uintptr_t(1)<<begin_in_page ) {
             if( concurrent_queue_base::copy == op_type ) {
                 base.copy_page_item( *new_page, begin_in_page, *src_page, begin_in_page );
             } else {
                 __TBB_ASSERT( concurrent_queue_base::move == op_type, NULL );
                 static_cast<concurrent_queue_base_v8&>(base).move_page_item( *new_page, begin_in_page, *src_page, begin_in_page );
             }
+        }
     return new_page;
 }
 

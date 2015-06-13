@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ typedef thread_monitor::handle_type thread_handle;
 class private_server;
 
 class private_worker: no_copy {
+private:
     //! State in finite-state machine that controls the worker.
     /** State diagram:
         init --> starting --> normal
@@ -89,7 +90,7 @@ class private_worker: no_copy {
 
     static __RML_DECL_THREAD_ROUTINE thread_routine( void* arg );
 
-    static void release_handle(thread_handle my_handle);
+    static void release_handle(thread_handle my_handle, bool join);
 
 protected:
     private_worker( private_server& server, tbb_client& client, const size_t i ) : 
@@ -120,6 +121,7 @@ public:
 #endif
 
 class private_server: public tbb_server, no_copy {
+private:
     tbb_client& my_client;
     //! Maximum number of threads to be created.
     /** Threads are created lazily, so maximum might not actually be reached. */
@@ -230,8 +232,8 @@ __RML_DECL_THREAD_ROUTINE private_worker::thread_routine( void* arg ) {
     #pragma warning(pop)
 #endif
 
-void private_worker::release_handle(thread_handle handle) {
-    if (governor::needsWaitWorkers())
+void private_worker::release_handle(thread_handle handle, bool join) {
+    if (join)
         thread_monitor::join(handle);
     else
         thread_monitor::detach_thread(handle);
@@ -253,7 +255,7 @@ void private_worker::start_shutdown() {
         // because in this case the thread wasn't started yet.
         // For st_starting release is done at launch site.
         if (s==st_normal)
-            release_handle(my_handle);
+            release_handle(my_handle, governor::does_client_join_workers(my_client));
     } else if( s==st_init ) {
         // Perform action that otherwise would be performed by associated thread when it quits.
         my_server.remove_server_ref();
@@ -310,7 +312,7 @@ inline void private_worker::wake_or_launch() {
             // by start_shutdown, because my_handle value might be not set yet
             // at time of transition from st_starting to st_quit.
             __TBB_ASSERT( s==st_quit, NULL );
-            release_handle(my_handle);
+            release_handle(my_handle, governor::does_client_join_workers(my_client));
         }
     }
     else

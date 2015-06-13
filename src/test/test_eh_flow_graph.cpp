@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,6 +19,9 @@
 */
 
 #include "harness_defs.h"
+
+#define HARNESS_DEFAULT_MIN_THREADS 2
+#define HARNESS_DEFAULT_MAX_THREADS 4
 
 #if _MSC_VER
     #pragma warning (disable: 4503) // Suppress "decorated name length exceeded, name was truncated" warning
@@ -179,12 +182,16 @@ class test_source_body : WaitThrow<serial_type, TType> {
     tbb::atomic<int> *my_current_val;
     int my_mult;
 public:
-    test_source_body(tbb::atomic<int> &my_cnt, int multiplier = 1) : my_current_val(&my_cnt), my_mult(multiplier) { }
+    test_source_body(tbb::atomic<int> &my_cnt, int multiplier = 1) : my_current_val(&my_cnt), my_mult(multiplier) {
+        REMARK("- --------- - - -   constructed %lx\n", (size_t)(my_current_val));
+    }
 
     bool operator()(OutputType & out) {
         UPDATE_COUNTS();
         out = OutputType(my_mult * ++(*my_current_val));
+        REMARK("xx(%lx) out == %d\n", (size_t)(my_current_val), (int)out);
         if(*my_current_val > g_NumItems) {
+            REMARK(" ------ End of the line!\n");
             *my_current_val = g_NumItems;
             return false;
         }
@@ -279,6 +286,7 @@ public:
 template<class BufferItemType>
 struct sequencer_body {
     size_t operator()(const BufferItemType &s) {
+        ASSERT(s, "sequencer item out of range (== 0)");
         return size_t(s) - 1;
     }
 };
@@ -1104,7 +1112,7 @@ void run_one_sequencer_node_test(bool throwException,bool flog) {
         if(iter == 0) {
             remove_edge(node_to_test, sink);
             node_to_test.try_put(BufferItemType(g_NumItems + 1));
-            node_to_test.try_put(BufferItemType());
+            node_to_test.try_put(BufferItemType(1));
             g.wait_for_all();
             g.reset();
             source_count = sink_count = 0;
@@ -1366,7 +1374,13 @@ struct run_one_join_node_test {
             else {
                 ASSERT(!g.exception_thrown(), "Exception flag in flow::graph set but no throw occurred");
                 ASSERT(!g.is_cancelled(), "canceled flag set but no throw occurred");
-                ASSERT(sb0_cnt == g_NumItems, "Missing invocations of source_node0");
+                if(sb0_cnt != g_NumItems) {
+                    REMARK("throwException == %s\n", throwException ? "true" : "false");
+                    REMARK("iter == %d\n", (int)iter);
+                    REMARK("sb0_cnt == %d\n", (int)sb0_cnt);
+                    REMARK("g_NumItems == %d\n", (int)g_NumItems);
+                }
+                ASSERT(sb0_cnt == g_NumItems, "Missing invocations of source_node0");  // this one
                 ASSERT(sb1_cnt == g_NumItems, "Missing invocations of source_node1");
                 ASSERT(nb_cnt == g_NumItems, "Missing items in absorbers");
             }

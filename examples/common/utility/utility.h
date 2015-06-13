@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -20,6 +20,13 @@
 
 #ifndef UTILITY_H_
 #define UTILITY_H_
+
+#if __TBB_MIC_OFFLOAD
+#pragma offload_attribute (push,target(mic))
+#include <exception>
+#include <cstdio>
+#pragma offload_attribute (pop)
+#endif // __TBB_MIC_OFFLOAD
 
 #include <string>
 #include <cstring>

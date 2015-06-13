@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -806,9 +806,8 @@ static const char* __itt_get_lib_name(void)
     return lib_name;
 }
 
-#ifndef min
-#define min(a,b) (a) < (b) ? (a) : (b)
-#endif /* min */
+/* Avoid clashes with std::min */
+#define __itt_min(a,b) (a) < (b) ? (a) : (b)
 
 static __itt_group_id __itt_get_groups(void)
 {
@@ -825,7 +824,7 @@ static __itt_group_id __itt_get_groups(void)
         while ((group_str = __itt_fsplit(group_str, ",; ", &chunk, &len)) != NULL)
         {
             __itt_fstrcpyn(gr, chunk, sizeof(gr) - 1);
-            gr[min(len, (int)(sizeof(gr) - 1))] = 0;
+            gr[__itt_min(len, (int)(sizeof(gr) - 1))] = 0;
 
             for (i = 0; group_list[i].name != NULL; i++)
             {
@@ -904,11 +903,13 @@ ITT_EXTERN_C void _N_(fini_ittlib)(void)
             if (current_thread == 0)
             {
                 current_thread = __itt_thread_id();
-                __itt_api_fini_ptr = (__itt_api_fini_t*)(size_t)__itt_get_proc(_N_(_ittapi_global).lib, "__itt_api_fini");
-                if (__itt_api_fini_ptr)
-                    __itt_api_fini_ptr(&_N_(_ittapi_global));
+                if (_N_(_ittapi_global).lib) {
+                    __itt_api_fini_ptr = (__itt_api_fini_t*)(size_t)__itt_get_proc(_N_(_ittapi_global).lib, "__itt_api_fini");
+                    if (__itt_api_fini_ptr)
+                        __itt_api_fini_ptr(&_N_(_ittapi_global));
 
-                __itt_nullify_all_pointers();
+                    __itt_nullify_all_pointers();
+                }
 
  /* TODO: !!! not safe !!! don't support unload so far.
   *             if (_N_(_ittapi_global).lib != NULL)

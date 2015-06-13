@@ -1,4 +1,4 @@
-# Copyright 2005-2014 Intel Corporation.  All Rights Reserved.
+# Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
 #
 # This file is part of Threading Building Blocks. Threading Building Blocks is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ ifeq (ios,$(target))
 endif
 
 ifndef runtime
- gcc_version = $(shell gcc -dumpversion)
+ gcc_version:=$(shell gcc -dumpversion)
  os_version:=$(shell /usr/bin/sw_vers -productVersion)
  export runtime:=cc$(gcc_version)_os$(os_version)
 endif
