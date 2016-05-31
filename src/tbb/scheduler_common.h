@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -120,6 +120,8 @@ inline void assert_priority_valid ( intptr_t p ) {
 inline intptr_t& priority ( task& t ) {
     return t.prefix().context->my_priority;
 }
+#else /* __TBB_TASK_PRIORITY */
+static const intptr_t num_priority_levels = 1;
 #endif /* __TBB_TASK_PRIORITY */
 
 //! Mutex type for global locks in the scheduler
@@ -276,6 +278,35 @@ inline bool ConcurrentWaitsEnabled ( task& t ) { return false; }
 
 #endif /* __TBB_TASK_GROUP_CONTEXT */
 
+inline void prolonged_pause() {
+#if defined(__TBB_time_stamp) && !__TBB_STEALING_PAUSE
+    // Assumption based on practice: 1000-2000 ticks seems to be a suitable invariant for the
+    // majority of platforms. Currently, skip platforms that define __TBB_STEALING_PAUSE
+    // because these platforms require very careful tuning.
+    machine_tsc_t prev = __TBB_time_stamp();
+    const machine_tsc_t finish = prev + 1000;
+    atomic_backoff backoff;
+    do {
+        backoff.bounded_pause();
+        machine_tsc_t curr = __TBB_time_stamp();
+        if ( curr <= prev )
+            // Possibly, the current logical thread is moved to another hadware thread or overflow is occured.
+            break;
+        prev = curr;
+    } while ( prev < finish );
+#else
+#ifdef __TBB_STEALING_PAUSE
+    static const long PauseTime = __TBB_STEALING_PAUSE;
+#elif __TBB_ipf
+    static const long PauseTime = 1500;
+#else
+    static const long PauseTime = 80;
+#endif
+    // TODO IDEA: Update PauseTime adaptively?
+    __TBB_Pause(PauseTime);
+#endif
+}
+
 //------------------------------------------------------------------------
 // arena_slot
 //------------------------------------------------------------------------
@@ -338,11 +369,8 @@ struct arena_slot : padded<arena_slot_line1>, padded<arena_slot_line2> {
 
     //! Deallocate task pool that was allocated by means of allocate_task_pool.
     void free_task_pool( ) {
-#if !__TBB_TASK_ARENA
-        __TBB_ASSERT( !task_pool /*TODO: == EmptyTaskPool*/, NULL);
-#else
-        //TODO: understand the assertion and modify
-#endif
+        // TODO: understand the assertion and modify
+        // __TBB_ASSERT( !task_pool /*TODO: == EmptyTaskPool*/, NULL);
         if( task_pool_ptr ) {
            __TBB_ASSERT( my_task_pool_size, NULL);
            NFS_Free( task_pool_ptr );

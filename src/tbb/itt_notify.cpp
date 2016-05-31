@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -49,6 +49,12 @@ extern "C" void MallocInitializeITT();
 namespace tbb {
 namespace internal {
 int __TBB_load_ittnotify() {
+#if !(_WIN32||_WIN64)
+    // tool_api crashes without dlopen, check that it's present. Common case
+    // for lack of dlopen is static binaries, i.e. ones build with -static.
+    if (dlopen == NULL)
+        return 0;
+#endif
     return __itt_init_ittlib(NULL,          // groups for:
       (__itt_group_id)(__itt_group_sync     // prepare/cancel/acquired/releasing
                        | __itt_group_thread // name threads
@@ -69,11 +75,11 @@ int __TBB_load_ittnotify() {
 namespace tbb {
 
 #if DO_ITT_NOTIFY
-    const tchar 
+    const tchar
             *SyncType_GlobalLock = _T("TbbGlobalLock"),
             *SyncType_Scheduler = _T("%Constant")
             ;
-    const tchar 
+    const tchar
             *SyncObj_SchedulerInitialization = _T("TbbSchedulerInitialization"),
             *SyncObj_SchedulersList = _T("TbbSchedulersList"),
             *SyncObj_WorkerLifeCycleMgmt = _T("TBB Scheduler"),

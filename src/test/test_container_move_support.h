@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -100,9 +100,6 @@ namespace Harness{
 tbb::atomic<size_t> FooCount;
 size_t MaxFooCount = 0;
 
-//! Problem size
-const size_t N = 500000;
-
 //! Exception for concurrent_container
 class Foo_exception : public std::bad_alloc {
 public:
@@ -152,7 +149,7 @@ public:
     }
     Foo(){
         my_bar = initial_value_of_bar;
-        FooCount++;        
+        FooCount++;
     }
     Foo( const Foo& foo ): FooLimit(), StateTrackable(foo){
         my_bar = foo.my_bar;

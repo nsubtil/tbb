@@ -1,4 +1,4 @@
-# Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+# Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 #
 # This file is part of Threading Building Blocks. Threading Building Blocks is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -40,14 +40,15 @@ else
 CPLUS_FLAGS = $(ITT_NOTIFY) -O0 -g -DUSE_PTHREAD -DTBB_USE_DEBUG
 endif
 
-OPENMP_FLAG = -openmp
-LIB_LINK_FLAGS = -shared -i-static -Wl,-soname=$(BUILDING_LIBRARY)
+LIB_LINK_FLAGS = -shared -static-intel -Wl,-soname=$(BUILDING_LIBRARY)
 LIBS += -lpthread -lrt
 LINK_FLAGS = -rdynamic
 C_FLAGS = $(CPLUS_FLAGS)
-# ICC 11.0 and higher support -std=c++0x
-ifneq (,$(shell icc -dumpversion | egrep  "^1[1-9]\."))
-    CPP11_FLAGS = -std=c++0x -D_TBB_CPP0X
+
+ifneq (,$(shell icc -dumpversion | egrep  "^1[6-9]\."))
+OPENMP_FLAG = -qopenmp
+else
+OPENMP_FLAG = -openmp
 endif
 
 # ICC 12.0 and higher provide Intel(R) Cilk(TM) Plus
@@ -69,16 +70,15 @@ ifeq (ia64,$(arch))
 # strict-ansi does not work with <signal.h> on RHEL 4 AS
     CPLUS_FLAGS += $(PIC_KEY) $(if $(findstring cc3.,$(runtime)),-ansi,-strict-ansi)
 else
-    CPLUS_FLAGS += -strict-ansi
+# For ICC 16 and older, -strict-ansi does not work with GNU C++ library headers
+# in std=c++14 mode, use -ansi for them
+# egrep returns 0 or 1, compare it in concatenation
+    CPLUS_FLAGS += $(if $(findstring c++14_1,$(stdver)_$(shell icc -dumpversion| egrep -c "^1[1-6]\.")),-ansi,-strict-ansi)
 endif
 
 ifneq (,$(codecov))
 # no tool support for code coverage, need profile data generation
     ITT_NOTIFY = -prof-genx
-endif
-
-ifneq (00,$(lambdas)$(cpp0x))
-	CXX_ONLY_FLAGS += $(CPP11_FLAGS)
 endif
 
 #------------------------------------------------------------------------------

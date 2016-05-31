@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor Class Reference</title>
+<title>tbb::flow::interface8::dependency_msg&lt; T, Factory &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -33,107 +33,81 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="a00240.html">tbb</a></li><li class="navelem"><b>interface5</b></li><li class="navelem"><a class="el" href="a00043.html">concurrent_hash_map</a></li><li class="navelem"><a class="el" href="a00054.html">const_accessor</a></li>  </ul>
+<li class="navelem"><a class="el" href="a00237.html">tbb</a></li><li class="navelem"><b>flow</b></li><li class="navelem"><b>interface8</b></li><li class="navelem"><a class="el" href="a00054.html">dependency_msg</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
-<a href="a00373.html">List of all members</a>  </div>
+<a href="a00329.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor Class Reference</div>  </div>
+<div class="title">tbb::flow::interface8::dependency_msg&lt; T, Factory &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Combines data access, locking, and garbage collection.  
- <a href="a00054.html#details">More...</a></p>
-
-<p><code>#include &lt;concurrent_hash_map.h&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="a00054.png" usemap="#tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor_map" alt=""/>
-  <map id="tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor_map" name="tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor_map">
-<area href="a00010.html" title="Allows write access to elements and combines data access, locking, and garbage collection. " alt="tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::accessor" shape="rect" coords="0,112,488,136"/>
-</map>
- </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aa8ca5aef4ee14b7eddb64767b8cd5fda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa8ca5aef4ee14b7eddb64767b8cd5fda"></a>
-typedef const <br class="typebreak"/>
-concurrent_hash_map::value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#aa8ca5aef4ee14b7eddb64767b8cd5fda">value_type</a></td></tr>
-<tr class="memdesc:aa8ca5aef4ee14b7eddb64767b8cd5fda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of value. <br/></td></tr>
-<tr class="separator:aa8ca5aef4ee14b7eddb64767b8cd5fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab01c10487547257703548fea8d2938b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab01c10487547257703548fea8d2938b6"></a>
+typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:ab01c10487547257703548fea8d2938b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6299b523d2ae8e2613f1bc160ca99b85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6299b523d2ae8e2613f1bc160ca99b85"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#a6299b523d2ae8e2613f1bc160ca99b85">empty</a> () const </td></tr>
-<tr class="memdesc:a6299b523d2ae8e2613f1bc160ca99b85"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if result is empty. <br/></td></tr>
-<tr class="separator:a6299b523d2ae8e2613f1bc160ca99b85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18390cb369369d72bdf7c867755b5190"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18390cb369369d72bdf7c867755b5190"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#a18390cb369369d72bdf7c867755b5190">release</a> ()</td></tr>
-<tr class="memdesc:a18390cb369369d72bdf7c867755b5190"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set to null. <br/></td></tr>
-<tr class="separator:a18390cb369369d72bdf7c867755b5190"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8adf04e33e7c8c876ba849f26807713a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8adf04e33e7c8c876ba849f26807713a"></a>
-const_reference&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#a8adf04e33e7c8c876ba849f26807713a">operator*</a> () const </td></tr>
-<tr class="memdesc:a8adf04e33e7c8c876ba849f26807713a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return reference to associated value in hash table. <br/></td></tr>
-<tr class="separator:a8adf04e33e7c8c876ba849f26807713a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28fa9b9e6c35d7e80217e69a7afe1ee5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28fa9b9e6c35d7e80217e69a7afe1ee5"></a>
-const_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#a28fa9b9e6c35d7e80217e69a7afe1ee5">operator-&gt;</a> () const </td></tr>
-<tr class="memdesc:a28fa9b9e6c35d7e80217e69a7afe1ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to associated value in hash table. <br/></td></tr>
-<tr class="separator:a28fa9b9e6c35d7e80217e69a7afe1ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b26d22d228cf0d8678c9b346c63752c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b26d22d228cf0d8678c9b346c63752c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#a7b26d22d228cf0d8678c9b346c63752c">const_accessor</a> ()</td></tr>
-<tr class="memdesc:a7b26d22d228cf0d8678c9b346c63752c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create empty result. <br/></td></tr>
-<tr class="separator:a7b26d22d228cf0d8678c9b346c63752c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbc0c85a146c912b9a0f94a7695957c7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbc0c85a146c912b9a0f94a7695957c7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00054.html#afbc0c85a146c912b9a0f94a7695957c7">~const_accessor</a> ()</td></tr>
-<tr class="memdesc:afbc0c85a146c912b9a0f94a7695957c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy result after releasing the underlying reference. <br/></td></tr>
-<tr class="separator:afbc0c85a146c912b9a0f94a7695957c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a05b74d408d8cd7773f7b5edfef97da1b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05b74d408d8cd7773f7b5edfef97da1b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_writer</b> ()</td></tr>
-<tr class="separator:a05b74d408d8cd7773f7b5edfef97da1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:ac9b96f45483ddbff95a95e8e666a8f28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9b96f45483ddbff95a95e8e666a8f28"></a>
-<a class="el" href="a00100.html">node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>my_node</b></td></tr>
-<tr class="separator:ac9b96f45483ddbff95a95e8e666a8f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5034084f595666b47734f99a6eaefa9f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5034084f595666b47734f99a6eaefa9f"></a>
-hashcode_t&#160;</td><td class="memItemRight" valign="bottom"><b>my_hash</b></td></tr>
-<tr class="separator:a5034084f595666b47734f99a6eaefa9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a9a30829231c2a2f13cb12430992a0701"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a30829231c2a2f13cb12430992a0701"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>concurrent_hash_map&lt; Key, T, HashCompare, Allocator &gt;</b></td></tr>
-<tr class="separator:a9a30829231c2a2f13cb12430992a0701"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1dfccf6cc719ff15006a2b05cf70dd7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1dfccf6cc719ff15006a2b05cf70dd7"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>accessor</b></td></tr>
-<tr class="separator:ab1dfccf6cc719ff15006a2b05cf70dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed2869b018ca03b7a261702130aacbe7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed2869b018ca03b7a261702130aacbe7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>dependency_msg</b> (const T &amp;data)</td></tr>
+<tr class="separator:aed2869b018ca03b7a261702130aacbe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57f27f1be95fd85014c359f6f390405e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57f27f1be95fd85014c359f6f390405e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>dependency_msg</b> (<a class="el" href="a00094.html">opencl_graph</a> &amp;g, const T &amp;data)</td></tr>
+<tr class="separator:a57f27f1be95fd85014c359f6f390405e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad8d861be34ff34848a7c4a67dda09da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad8d861be34ff34848a7c4a67dda09da"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>dependency_msg</b> (const T &amp;data, cl_event event)</td></tr>
+<tr class="separator:aad8d861be34ff34848a7c4a67dda09da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c52ca4f527d34052ea3fa801df86672"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c52ca4f527d34052ea3fa801df86672"></a>
+T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> (bool wait=true)</td></tr>
+<tr class="separator:a6c52ca4f527d34052ea3fa801df86672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba69b97a06776827e61848693414752"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ba69b97a06776827e61848693414752"></a>
+const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> (bool wait=true) const </td></tr>
+<tr class="separator:a5ba69b97a06776827e61848693414752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66243b57a60cfb4bdf1a5e734fadc7b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66243b57a60cfb4bdf1a5e734fadc7b0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>dependency_msg</b> (const <a class="el" href="a00054.html">dependency_msg</a> &amp;dmsg)</td></tr>
+<tr class="separator:a66243b57a60cfb4bdf1a5e734fadc7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cccd6ca947999c15ebf650a98f32788"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2cccd6ca947999c15ebf650a98f32788"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>dependency_msg</b> (<a class="el" href="a00054.html">dependency_msg</a> &amp;&amp;dmsg)</td></tr>
+<tr class="separator:a2cccd6ca947999c15ebf650a98f32788"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd51d01a8d6f36a064b7edd5b016f0ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd51d01a8d6f36a064b7edd5b016f0ea"></a>
+<a class="el" href="a00054.html">dependency_msg</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="a00054.html">dependency_msg</a> &amp;dmsg)</td></tr>
+<tr class="separator:abd51d01a8d6f36a064b7edd5b016f0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf64903cffe6baa0a050b596049f6382"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf64903cffe6baa0a050b596049f6382"></a>
+cl_event const *&#160;</td><td class="memItemRight" valign="bottom"><b>get_event</b> () const </td></tr>
+<tr class="separator:adf64903cffe6baa0a050b596049f6382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a919f2789626c8b2f626e6891c0a49423"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a919f2789626c8b2f626e6891c0a49423"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_event</b> (cl_event e) const </td></tr>
+<tr class="separator:a919f2789626c8b2f626e6891c0a49423"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e8b213c4da93aeb76043f6fe7a5d57d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e8b213c4da93aeb76043f6fe7a5d57d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_graph</b> (graph &amp;g)</td></tr>
+<tr class="separator:a2e8b213c4da93aeb76043f6fe7a5d57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5dc70ed898045a223500c7738635ce4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5dc70ed898045a223500c7738635ce4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_event</b> () const </td></tr>
+<tr class="separator:ae5dc70ed898045a223500c7738635ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03636570f7011cd3a2dbcf5b8da2ea41"><td class="memTemplParams" colspan="2"><a class="anchor" id="a03636570f7011cd3a2dbcf5b8da2ea41"></a>
+template&lt;typename Callback &gt; </td></tr>
+<tr class="memitem:a03636570f7011cd3a2dbcf5b8da2ea41"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>register_callback</b> (Callback c) const </td></tr>
+<tr class="separator:a03636570f7011cd3a2dbcf5b8da2ea41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a382718f32d3ca0672b6b725d388de916"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a382718f32d3ca0672b6b725d388de916"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>operator T &amp;</b> ()</td></tr>
+<tr class="separator:a382718f32d3ca0672b6b725d388de916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3bc7dee9f48f5709cfbbaa679757af5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3bc7dee9f48f5709cfbbaa679757af5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>operator const T &amp;</b> () const </td></tr>
+<tr class="separator:af3bc7dee9f48f5709cfbbaa679757af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Key, typename T, typename HashCompare = tbb_hash_compare&lt;Key&gt;, typename A = tbb_allocator&lt;std::pair&lt;Key, T&gt; &gt;&gt;<br/>
-class tbb::interface5::concurrent_hash_map&lt; Key, T, HashCompare, A &gt;::const_accessor</h3>
-
-<p>Combines data access, locking, and garbage collection. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>concurrent_hash_map.h</li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>flow_graph_opencl_node.h</li>
 </ul>
 </div><!-- contents -->
 <hr>
 <p></p>
-Copyright &copy; 2005-2015 Intel Corporation.  All Rights Reserved.
+Copyright &copy; 2005-2016 Intel Corporation.  All Rights Reserved.
 <p></p>
 Intel, Pentium, Intel Xeon, Itanium, Intel XScale and VTune are
 registered trademarks or trademarks of Intel Corporation or its

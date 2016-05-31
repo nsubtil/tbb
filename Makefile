@@ -1,4 +1,4 @@
-# Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+# Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 #
 # This file is part of Threading Building Blocks. Threading Building Blocks is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -53,6 +53,10 @@ rml: mkdir
 
 examples: tbb tbbmalloc
 	$(MAKE) -C examples -r -f Makefile tbb_root=.. release test
+
+python: mkdir
+	$(MAKE) -C "$(work_dir)_release"  -r -f $(tbb_root)/build/Makefile.tbb cfg=release
+	bash -c ". $(work_dir)_release$(SLASH)tbbvars.sh && $(MAKE) -rC '$(full_tbb_root)/python' CXX=$(compiler) install test-install"
 
 .PHONY: clean clean_examples mkdir info
 

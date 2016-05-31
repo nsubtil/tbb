@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ size_t __TBB_EXPORTED_FUNC get_initial_auto_partitioner_divisor();
 }}
 
 int ArenaConcurrency() {
-    return tbb::internal::get_initial_auto_partitioner_divisor()/4; // TODO: expose through task_arena interface?
+    return int(tbb::internal::get_initial_auto_partitioner_divisor()/4); // TODO: expose through task_arena interface?
 }
 
 // Generally, TBB does not guarantee mandatory parallelism. This test uses some whitebox knowledge about when all the threads can be available
@@ -64,7 +64,7 @@ void InitializeAndTerminate( int maxthread ) {
                 default: {
                     tbb::task_scheduler_init init( threads );
                     ASSERT(init.is_active(), NULL);
-                    ASSERT(ArenaConcurrency()==threads, NULL);
+                    ASSERT(ArenaConcurrency()==(threads==1)?2:threads, NULL);
                     ASSERT(!test_mandatory_parallelism || Harness::CanReachConcurrencyLevel(threads), NULL);
                     if(i&0x20) tbb::task::enqueue( (*new( tbb::task::allocate_root() ) TaskGenerator(2,6)) ); // a work deferred to workers
                     break;
@@ -72,7 +72,7 @@ void InitializeAndTerminate( int maxthread ) {
                 case 0: {
                     tbb::task_scheduler_init init;
                     ASSERT(init.is_active(), NULL);
-                    ASSERT(ArenaConcurrency()==init.default_num_threads(), NULL);
+                    ASSERT(ArenaConcurrency()==(DefaultThreads==1)?2:init.default_num_threads(), NULL);
                     ASSERT(!test_mandatory_parallelism || Harness::CanReachConcurrencyLevel(init.default_num_threads()), NULL);
                     if(i&0x40) tbb::task::enqueue( (*new( tbb::task::allocate_root() ) TaskGenerator(3,5)) ); // a work deferred to workers
                     break;
@@ -82,7 +82,7 @@ void InitializeAndTerminate( int maxthread ) {
                     ASSERT(!init.is_active(), "init should not be active; initialization was deferred");
                     init.initialize( threads );
                     ASSERT(init.is_active(), NULL);
-                    ASSERT(ArenaConcurrency()==threads, NULL);
+                    ASSERT(ArenaConcurrency()==(threads==1)?2:threads, NULL);
                     ASSERT(!test_mandatory_parallelism || Harness::CanReachConcurrencyLevel(threads), NULL);
                     init.terminate();
                     ASSERT(!init.is_active(), "init should not be active; it was terminated");
@@ -91,7 +91,7 @@ void InitializeAndTerminate( int maxthread ) {
                 case 2: {
                     tbb::task_scheduler_init init( tbb::task_scheduler_init::automatic );
                     ASSERT(init.is_active(), NULL);
-                    ASSERT(ArenaConcurrency()==init.default_num_threads(), NULL);
+                    ASSERT(ArenaConcurrency()==(DefaultThreads==1)?2:init.default_num_threads(), NULL);
                     ASSERT(!test_mandatory_parallelism || Harness::CanReachConcurrencyLevel(init.default_num_threads()), NULL);
                     break;
                 }
@@ -135,14 +135,13 @@ public:
     }
 };
 
-/** The test will fail in particular if task_scheduler_init mistakenly hooks up 
+/** The test will fail in particular if task_scheduler_init mistakenly hooks up
     auto-initialization mechanism. **/
 void AssertExplicitInitIsNotSupplanted () {
-    int hardwareConcurrency = tbb::task_scheduler_init::default_num_threads();
     tbb::task_scheduler_init init(1);
     Harness::ConcurrencyTracker::Reset();
-    tbb::parallel_for( Range(0, hardwareConcurrency * 2, 1), ConcurrencyTrackingBody(), tbb::simple_partitioner() );
-    ASSERT( Harness::ConcurrencyTracker::PeakParallelism() == 1, 
+    tbb::parallel_for( Range(0, DefaultThreads * 2, 1), ConcurrencyTrackingBody(), tbb::simple_partitioner() );
+    ASSERT( Harness::ConcurrencyTracker::PeakParallelism() == 1,
             "Manual init provided more threads than requested. See also the comment at the beginning of main()." );
 }
 

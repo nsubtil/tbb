@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -540,14 +540,14 @@ template<typename ContainerType, typename RangeType>
 struct ParallelTraverseBody: NoAssign {
     const int n;
     AtomicByte* const array;
-    ParallelTraverseBody( AtomicByte an_array[], int a_n ) : 
+    ParallelTraverseBody( AtomicByte an_array[], int a_n ) :
         n(a_n), array(an_array)
     {}
     void operator()( const RangeType& range ) const {
         for( typename RangeType::iterator i = range.begin(); i!=range.end(); ++i ) {
             int k = Value<ContainerType>::key(*i);
             ASSERT( k == Value<ContainerType>::get(*i), NULL );
-            ASSERT( 0<=k && k<n, NULL ); 
+            ASSERT( 0<=k && k<n, NULL );
             array[k]++;
         }
     }
@@ -781,13 +781,14 @@ struct unordered_move_traits_base {
 };
 
 template<typename container_traits>
-void test_rvalue_ref_support(const char* /*container_name*/){
+void test_rvalue_ref_support(const char* container_name){
     TestMoveConstructor<container_traits>();
     TestMoveAssignOperator<container_traits>();
 #if TBB_USE_EXCEPTIONS
     TestExceptionSafetyGuaranteesMoveConstructorWithUnEqualAllocatorMemoryFailure<container_traits>();
     TestExceptionSafetyGuaranteesMoveConstructorWithUnEqualAllocatorExceptionInElementCtor<container_traits>();
 #endif //TBB_USE_EXCEPTIONS
+    REMARK("passed -- %s move support tests\n", container_name);
 }
 #endif //__TBB_CPP11_RVALUE_REF_PRESENT
 

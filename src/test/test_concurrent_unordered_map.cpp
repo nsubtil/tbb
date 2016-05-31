@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ struct SpecialTests <MyMap> {
         // mapped_type& operator[](const key_type& k);
         cont[1] = 2;
 
-        // bool empty() const;    
+        // bool empty() const;
         ASSERT( !ccont.empty( ), "Concurrent container empty after adding an element" );
 
         // size_type size() const;
@@ -114,7 +114,7 @@ struct SpecialTests <MyMultiMap> {
         // mapped_type& operator[](const key_type& k);
         cont.insert( std::make_pair( 1, one_values[0] ) );
 
-        // bool empty() const;    
+        // bool empty() const;
         ASSERT( !ccont.empty( ), "Concurrent container empty after adding an element" );
 
         // size_type size() const;
@@ -125,7 +125,7 @@ struct SpecialTests <MyMultiMap> {
 
         cont.insert( std::make_pair( 1, one_values[1] ) );
 
-        // bool empty() const;    
+        // bool empty() const;
         ASSERT( !ccont.empty( ), "Concurrent container empty after adding an element" );
 
         // size_type size() const;
@@ -142,7 +142,7 @@ struct SpecialTests <MyMultiMap> {
 
         cont.insert( std::make_pair( 0, zero_values[0] ) );
 
-        // bool empty() const;    
+        // bool empty() const;
         ASSERT( !ccont.empty( ), "Concurrent container empty after adding an element" );
 
         // size_type size() const;
@@ -257,7 +257,7 @@ void TestTypes() {
     }
     TestTypesMap</*defCtorPresent = */true>( arrIntTbb );
 
-#if __TBB_CPP11_REFERENCE_WRAPPER_PRESENT
+#if __TBB_CPP11_REFERENCE_WRAPPER_PRESENT && !__TBB_REFERENCE_WRAPPER_COMPILATION_BROKEN
     std::list< std::pair<const std::reference_wrapper<const int>, int> > arrRefInt;
     for ( std::list< std::pair<const int, int> >::iterator it = arrIntInt.begin(); it != arrIntInt.end(); ++it )
         arrRefInt.push_back( std::make_pair( std::reference_wrapper<const int>( it->first ), it->second ) );
@@ -269,7 +269,7 @@ void TestTypes() {
         arrIntRef.push_back( std::pair<const int, std::reference_wrapper<int> >( it->first, std::reference_wrapper<int>( it->second ) ) );
     }
     TestTypesMap</*defCtorPresent = */false>( arrIntRef );
-#endif /* __TBB_CPP11_REFERENCE_WRAPPER_PRESENT */
+#endif /* __TBB_CPP11_REFERENCE_WRAPPER_PRESENT && !__TBB_REFERENCE_WRAPPER_COMPILATION_BROKEN */
 
 #if __TBB_CPP11_SMART_POINTERS_PRESENT
     std::list< std::pair< const std::shared_ptr<int>, std::shared_ptr<int> > > arrShrShr;
@@ -320,7 +320,7 @@ int TestMain() {
     test_rvalue_ref_support<cu_map_type>( "concurrent unordered map" );
     test_rvalue_ref_support<cu_multimap_type>( "concurrent unordered multimap" );
 #endif /* __TBB_CPP11_RVALUE_REF_PRESENT */
-    
+
     TestTypes();
 
     return Harness::Done;

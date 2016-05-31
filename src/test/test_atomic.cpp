@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -50,11 +50,6 @@ using std::memcmp;
     #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
-// Intel(R) Compiler have an issue when a scoped enum with a specified underlying type has negative values.
-#define __TBB_ICC_SCOPED_ENUM_WITH_UNDERLYING_TYPE_NEGATIVE_VALUE_BROKEN ( _MSC_VER && !__TBB_DEBUG && __INTEL_COMPILER && __INTEL_COMPILER <= 1500 )
-// Intel(R) Compiler have an issue with __atomic_load_explicit from a scoped enum with a specified underlying type.
-#define __TBB_ICC_SCOPED_ENUM_WITH_UNDERLYING_TYPE_ATOMIC_LOAD_BROKEN ( TBB_USE_ICC_BUILTINS && !__TBB_DEBUG && __INTEL_COMPILER && __INTEL_COMPILER <= 1500 )
-
 enum LoadStoreExpression {
     UseOperators,
     UseImplicitAcqRel,
@@ -102,7 +97,7 @@ template<typename T, LoadStoreExpression E> tbb::atomic<T> TestStruct<T, E>::gCo
 //! Test compare_and_swap template members of class atomic<T> for memory_semantics=M
 template<typename T,tbb::memory_semantics M>
 void TestCompareAndSwapWithExplicitOrdering( T i, T j, T k ) {
-    ASSERT( i!=k, "values must be distinct" ); 
+    ASSERT( i!=k, "values must be distinct" );
     // Test compare_and_swap that should fail
     TestStruct<T> x(i);
     T old = x.counter.template compare_and_swap<M>( j, k );
@@ -396,6 +391,7 @@ void TestConstExprInitializationIsTranslationTime(){
     constexpr atomic_t a(8);
     ASSERT(a == 8,ct_init_failed_msg);
 
+#if !__TBB_CONSTEXPR_MEMBER_FUNCTION_BROKEN
     constexpr tbb::atomic<test_constexpr_initialization_helper::white_box_ad_hoc_type> ct_atomic(10);
     //for some unknown reason clang does not managed to enum syntax
 #if __clang__
@@ -407,6 +403,7 @@ void TestConstExprInitializationIsTranslationTime(){
     ASSERT(ct_atomic_value_ten == 10,ct_init_failed_msg);
     int array[ct_atomic_value_ten];
     ASSERT(Harness::array_length(array) == 10,ct_init_failed_msg);
+#endif //__TBB_CONSTEXPR_MEMBER_FUNCTION_BROKEN
 }
 
 #include <string>
@@ -475,7 +472,7 @@ namespace TestConstExprInitializationOfGlobalObjectsHelper{
        static_before(){ result = (static_atomic==ct_value); }            \
     } ;                                                                  \
                                                                          \
-    typename tester<T>::static_before tester<T>::static_before_;         \
+    tester<T>::static_before tester<T>::static_before_;                  \
     tbb::atomic<T> tester<T>::static_atomic(ct_value);                   \
                                                                          \
     auto_registered_tests_helper::registration<T> tester<T>::registered; \
@@ -489,11 +486,15 @@ namespace TestConstExprInitializationOfGlobalObjectsHelper{
     }
 
     void CallExprInitTests(){
+#   if __TBB_STATIC_CONSTEXPR_INIT_BROKEN
+        REPORT("Known issue: Compile-time initialization fails for static tbb::atomic variables\n");
+#   else
         using namespace auto_registered_tests_helper;
         for (size_t i =0; i<const_expr_tests.size(); ++i){
             (*const_expr_tests[i])();
         }
-        REMARK("ran  %d consrexpr static init test \n",const_expr_tests.size());
+        REMARK("ran %d constexpr static init test \n",const_expr_tests.size());
+#   endif
     }
 
     //TODO: unify somehow list of tested types with one in TestMain
@@ -612,8 +613,8 @@ void TestAlignment( const char* name ) {
 }
 
 #if _MSC_VER && !defined(__INTEL_COMPILER)
-    // unary minus operator applied to unsigned type, result still unsigned
-    #pragma warning( disable: 4146 )
+    #pragma warning( disable: 4146 ) // unary minus operator applied to unsigned type, result still unsigned
+    #pragma warning( disable: 4334 ) // result of 32-bit shift implicitly converted to 64 bits
 #endif
 
 /** T is an integral type. */
@@ -716,9 +717,9 @@ void TestAtomicEnum() {
 enum class ScopedColor1 {ScopedRed,ScopedGreen,ScopedBlue=-1};
 // TODO: extend the test to cover 2 byte scoped enum as well
 #if __TBB_ICC_SCOPED_ENUM_WITH_UNDERLYING_TYPE_NEGATIVE_VALUE_BROKEN
-enum class ScopedColor2 : char {ScopedZero, ScopedOne,ScopedRed=42,ScopedGreen=-1,ScopedBlue=127};
+enum class ScopedColor2 : signed char {ScopedZero, ScopedOne,ScopedRed=42,ScopedGreen=-1,ScopedBlue=127};
 #else
-enum class ScopedColor2 : char {ScopedZero, ScopedOne,ScopedRed=-128,ScopedGreen=-1,ScopedBlue=127};
+enum class ScopedColor2 : signed char {ScopedZero, ScopedOne,ScopedRed=-128,ScopedGreen=-1,ScopedBlue=127};
 #endif
 
 // TODO: replace the hack of getting symbolic enum name with a better implementation
@@ -729,7 +730,7 @@ std::string to_string<ScopedColor1>(const ScopedColor1& a){
 }
 template<>
 std::string to_string<ScopedColor2>(const ScopedColor2& a){
-    return enum_strings[a==ScopedColor2::ScopedRed? 2 : 
+    return enum_strings[a==ScopedColor2::ScopedRed? 2 :
         a==ScopedColor2::ScopedGreen? 3 : a==ScopedColor2::ScopedBlue? 4 : (int)a ];
 }
 
@@ -1285,7 +1286,7 @@ public:
                     if( flag!=(T)-1 ) {
                         REPORT("ERROR: flag!=(T)-1 k=%d i=%d trial=%x type=%s (atomicity problem?)\n", k, i, trial, name );
                         ParallelError = true;
-                    } 
+                    }
                     if( !IsRelaxed(E) && message!=(T)-1 ) {
                         REPORT("ERROR: message!=(T)-1 k=%d i=%d trial=%x type=%s mode=%d (memory fence problem?)\n", k, i, trial, name, E );
                         ParallelError = true;

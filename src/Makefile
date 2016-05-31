@@ -1,4 +1,4 @@
-# Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+# Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 #
 # This file is part of Threading Building Blocks. Threading Building Blocks is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -93,6 +93,9 @@ ifeq ($(origin cfg),file)
 else
 	@$(MAKE) -C "$(work_dir)_$(cfg)"  -r -f $(tbb_root)/build/Makefile.test $@
 endif
+
+python_%: tbb_release
+	bash -c ". $(work_dir)_release$(SLASH)tbbvars.sh && $(MAKE) -rC '$(full_tbb_root)/python' CXX=$(compiler) $(subst python_,,$@)"
 
 .PHONY: test_release test_debug test_release_no_depends test_debug_no_depends
 .PHONY: tbb_release tbb_debug tbb_test_release tbb_test_debug tbb_test_release_no_depends tbb_test_debug_no_depends

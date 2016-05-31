@@ -1,5 +1,5 @@
 /*
-    Copyright 2005-2015 Intel Corporation.  All Rights Reserved.
+    Copyright 2005-2016 Intel Corporation.  All Rights Reserved.
 
     This file is part of Threading Building Blocks. Threading Building Blocks is free software;
     you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -252,13 +252,17 @@ inline void run_initializer( bool (*f)(), atomic<do_once_state>& state ) {
     public:
         affinity_helper() : threadMask(NULL), is_changed(0) {}
         ~affinity_helper();
-        void protect_affinity_mask();
+        void protect_affinity_mask( bool restore_process_mask  );
+        void dismiss();
     };
+    void destroy_process_mask();
 #else
     class affinity_helper : no_copy {
     public:
-        void protect_affinity_mask() {}
+        void protect_affinity_mask( bool ) {}
+        void dismiss() {}
     };
+    inline void destroy_process_mask(){}
 #endif /* __TBB_USE_OS_AFFINITY_SYSCALL */
 
 extern bool cpu_has_speculation();
